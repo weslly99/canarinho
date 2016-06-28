@@ -4,6 +4,8 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 
+import java.util.regex.Pattern;
+
 import br.com.concretesolutions.canarinho.formatador.Formatador;
 import br.com.concretesolutions.canarinho.validator.Validador;
 import br.com.concretesolutions.canarinho.watcher.evento.EventoDeValidacao;
@@ -18,6 +20,7 @@ public abstract class BaseCanarinhoTextWatcher implements TextWatcher {
     private boolean mudancaInterna = false;
     private int tamanhoAnterior = 0;
     private EventoDeValidacao eventoDeValidacao;
+    private boolean alfanumerico = false;
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,7 +148,7 @@ public abstract class BaseCanarinhoTextWatcher implements TextWatcher {
 
     private StringBuilder carregarMascara(String s, char[] mascara) {
         final StringBuilder builder = new StringBuilder();
-        final String str = Formatador.Padroes.PADRAO_SOMENTE_NUMEROS.matcher(s).replaceAll("");
+        final String str = desformata(s);
 
         // Só carregará a máscara se existir algum valor informado
         if (str.length() > 0) {
@@ -184,4 +187,20 @@ public abstract class BaseCanarinhoTextWatcher implements TextWatcher {
     public void setEventoDeValidacao(EventoDeValidacao eventoDeValidacao) {
         this.eventoDeValidacao = eventoDeValidacao;
     }
+
+    /**
+     * Método que remove a formatação da String.
+     *
+     * @param value    Texto formatado com caracteres especiais.
+     */
+    private String desformata(String value) {
+        Pattern pattern = alfanumerico ? Formatador.Padroes.PADRAO_ALFANUMERICOS :
+                Formatador.Padroes.PADRAO_SOMENTE_NUMEROS;
+        return pattern.matcher(value).replaceAll("");
+    }
+
+    public void tipoEntradaAlfanumerico() {
+        alfanumerico = true;
+    }
+
 }

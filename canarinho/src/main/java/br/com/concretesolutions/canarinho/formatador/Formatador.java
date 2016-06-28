@@ -106,6 +106,8 @@ public interface Formatador {
                 .compile("(\\d{3})(\\d{3})(\\d{3})(\\d{2})");
         public static final Pattern PADRAO_SOMENTE_NUMEROS = Pattern
                 .compile("[^0-9]");
+        public static final Pattern PADRAO_ALFANUMERICOS = Pattern
+                .compile("[^A-Za-z0-9]");
     }
 
 }
